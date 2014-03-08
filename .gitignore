@@ -1,0 +1,130 @@
+package cl.washington.eclipse.ide.first;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import java.util.List;
+
+
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+public class MyFirstClass {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		
+JFrame frame = new JFrame("Breakfast Calories");
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+
+
+final JList list;
+String[] breakfast = {"Scrambled Eggs(2)-199c", "Bacon(3)-105c", "Toast(2)-180c", "Milk(glass)-103c", 
+		"Orange Juice(glass)-39c", "Cereal(cup)-125c", "Muffin-426c", "Bagel-245c", 
+		"Jelly-50c", "Cream Cheese-35c", "Yogurt(cup)-149c", "Doughnut-195c", "Apple-52c", 
+		"Banana-94c", "Grapes(cup)-114c"};
+
+list = new JList(breakfast);
+list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+list.setLayoutOrientation(JList.VERTICAL_WRAP);
+list.setVisibleRowCount(-1);
+
+JScrollPane listScroller = new JScrollPane(list);
+
+Container contentPane = frame.getContentPane();
+contentPane.add(listScroller, BorderLayout.WEST);
+
+
+
+final ListSelectionListener listListener = new ListSelectionListener()
+{
+	public void valueChanged(ListSelectionEvent e)
+	{
+		if(e.getValueIsAdjusting()==false)
+		{
+			
+			
+			boolean adjust = e.getValueIsAdjusting();
+			if(!adjust){
+				JList myList = (JList)e.getSource();
+				int[] selections = list.getSelectedIndices();
+				
+				if(selections != null){
+					selections[0] = 199;
+					selections[1] = 105;
+					selections[2] = 180;
+					selections[3] = 103;
+					selections[4] = 39;
+					selections[5] = 125;
+					selections[6] = 426;
+					selections[7] = 245;
+					selections[8] = 50;
+					selections[9] = 35;
+					selections[10] = 149;
+					selections[11] = 195;
+					selections[12] = 52;
+					selections[13] = 94;
+					selections[14] = 114;
+					}
+				
+				int sum = 0;
+				for(int i : selections) {
+					sum += i;
+					System.out.println(sum);
+				}
+				
+				
+				List<?> printList = list.getSelectedValuesList();
+				
+				for(int i = 0; i < selections.length; i++){
+					if(i==0){
+						System.out.print("Breakfast Choices:");
+					}
+						System.out.print(printList + ", " );
+						}
+					System.out.println();
+		
+	}
+};
+
+list.addListSelectionListener(this);
+
+
+final MouseListener mouseListener = new MouseAdapter(){
+	public void mouseClicked(MouseEvent mouseEvent){
+		//JList theList = (JList)mouseEvent.getSource();
+		if(mouseEvent.getClickCount()==2){
+			System.out.print("No need to double click.  Please"
+					+ "click the Start Over button to choose"
+					+ "your breakfast items.");
+		}
+		list.addMouseListener(this);
+	}
+	
+	
+};
+
+
+	}
+};
+
+frame.setSize(600, 450);
+frame.setVisible(true);
+
+
+}
+
+}
+	
+
+
