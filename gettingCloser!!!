@@ -1,0 +1,172 @@
+package cl.washington.eclipse.first;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+
+
+
+
+
+public class MyFirstTwo extends JPanel {
+    JTextArea output;
+    JList list; 
+    String newline = "\n";
+    ListSelectionModel listSelectionModel;
+
+    public  MyFirstTwo() {
+        super(new BorderLayout());
+ 
+        String[] breakfast = {"Scrambled Eggs(2)-199c", "Bacon(3)-105c", "Toast(2)-180c", "Milk(glass)-103c", 
+        		"Orange Juice(glass)-39c", "Cereal(cup)-125c", "Muffin-426c", "Bagel-245c", 
+        		"Jelly-50c", "Cream Cheese-35c", "Yogurt(cup)-149c", "Doughnut-195c", "Apple-52c", 
+        		"Banana-94c", "Grapes(cup)-114c"};
+        
+        list = new JList(breakfast);
+ 
+        listSelectionModel = list.getSelectionModel();
+        listSelectionModel.addListSelectionListener(
+                new SharedListSelectionHandler());
+        JScrollPane listPane = new JScrollPane(list);
+
+        output = new JTextArea("   Breakfast choices: " + newline, 10, 10);
+        output.setEditable(false);
+        JScrollPane outputPane = new JScrollPane(output,
+                         ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                         ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+   
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        add(splitPane, BorderLayout.CENTER);
+ 
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.LINE_AXIS));
+        JPanel listContainer = new JPanel(new GridLayout(1, 1));
+        listContainer.setBorder(BorderFactory.createTitledBorder(
+                                                "Breakfast Items"));
+        listContainer.add(listPane);
+         
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(5,5,0,5));
+        leftPanel.add(listContainer);
+        
+ 
+        leftPanel.setMinimumSize(new Dimension(200, 100));
+        leftPanel.setPreferredSize(new Dimension(200, 200));
+        splitPane.add(leftPanel);
+ 
+        JPanel rightPanel = new JPanel(new BorderLayout());
+        
+        rightPanel.add(outputPane, BorderLayout.CENTER);
+        
+        rightPanel.setMinimumSize(new Dimension(300, 100));
+        rightPanel.setPreferredSize(new Dimension(350, 150));
+        splitPane.add(rightPanel);
+    }
+        
+    private static void createAndShowGUI() {
+        //Create and set up the window.
+        JFrame frame = new JFrame("Breakfast Calories");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ 
+        //Create and set up the content pane.
+        MyFirstTwo display = new MyFirstTwo();
+        display.setOpaque(true);
+        frame.setContentPane(display);
+ 
+        //Display the window.
+        frame.pack();
+        frame.setVisible(true);
+    }   
+        
+        
+        
+        
+        
+    public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+    	 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+             public void run() {
+                 createAndShowGUI();
+             }
+         });
+     }
+    
+    class SharedListSelectionHandler implements ListSelectionListener {
+        public void valueChanged(ListSelectionEvent e) { 
+            ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+ 
+            //int firstIndex = e.getFirstIndex();
+            //int lastIndex = e.getLastIndex();
+            String choice = e.toString();
+            boolean isAdjusting = e.getValueIsAdjusting(); 
+            if(!isAdjusting){
+				//JList myList = (JList)e.getSource();
+				int[] selections = list.getSelectedIndices();
+				if(selections != null){
+					selections[0] = 199;
+					selections[1] = 105;
+					selections[2] = 180;
+					selections[3] = 103;
+					selections[4] = 39;
+					selections[5] = 125;
+					selections[6] = 426;
+					selections[7] = 245;
+					selections[8] = 50;
+					selections[9] = 35;
+					selections[10] = 149;
+					selections[11] = 195;
+					selections[12] = 52;
+					selections[13] = 94;
+					selections[14] = 114;
+					}
+
+				int sum = 0;
+				for(int i : selections) {
+					sum += i;
+					
+				}
+				System.out.println(sum);
+            output.append(//"Event for indexes "
+                        //  + 
+            		choice
+            		//+ " - " + lastIndex
+                      //    + "; isAdjusting is " + isAdjusting
+                        //  + "; selected indexes:"
+            
+            		);
+            }
+ 
+   //         if (lsm.isSelectionEmpty()) {
+   //             output.append(" <none>");
+   //         } else {
+   //             // Find out which indexes are selected.
+   //             int minIndex = lsm.getMinSelectionIndex();
+   //             int maxIndex = lsm.getMaxSelectionIndex();
+   //             for (int i = minIndex; i <= maxIndex; i++) {
+   //                 if (lsm.isSelectedIndex(i)) {
+   //                     output.append(" " + i);
+   //                 }
+   //             }
+   //         }
+            output.append(newline);
+            output.setCaretPosition(output.getDocument().getLength());
+        }
+		
+		
+		
+}
+}
