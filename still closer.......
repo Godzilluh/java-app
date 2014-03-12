@@ -1,0 +1,213 @@
+package cl.washington.eclipse.first;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+
+
+
+
+
+public class MyFirstTwo extends JPanel {
+    JTextArea output;
+    JList list; 
+    String newline = "\n";
+    ListSelectionModel listSelectionModel;
+
+    public  MyFirstTwo() {
+        super(new BorderLayout());
+ 
+        String[] breakfast = {"Scrambled Eggs(2)", "Bacon(3)", "Toast(2)", "Milk(glass)", 
+        		"Orange Juice(glass)", "Cereal(cup)", "Muffin", "Bagel", 
+        		"Jelly", "Cream Cheese", "Yogurt(cup)", "Doughnut", "Apple", 
+        		"Banana", "Grapes(cup)"};
+        
+        list = new JList(breakfast);
+        
+       
+        
+ 
+        listSelectionModel = list.getSelectionModel();
+        listSelectionModel.addListSelectionListener(
+                new SharedListSelectionHandler());
+        JScrollPane listPane = new JScrollPane(list);
+
+        output = new JTextArea("   Breakfast choices: " + newline, 10, 10);
+        output.setEditable(false);
+        JScrollPane outputPane = new JScrollPane(output,
+                         ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                         ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+   
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        add(splitPane, BorderLayout.CENTER);
+ 
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.LINE_AXIS));
+        JPanel listContainer = new JPanel(new GridLayout(1, 1));
+        listContainer.setBorder(BorderFactory.createTitledBorder(
+                                                "Breakfast Items"));
+        listContainer.add(listPane);
+         
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(5,5,0,5));
+        leftPanel.add(listContainer);
+        
+ 
+        leftPanel.setMinimumSize(new Dimension(200, 100));
+        leftPanel.setPreferredSize(new Dimension(200, 200));
+        splitPane.add(leftPanel);
+ 
+        JPanel rightPanel = new JPanel(new BorderLayout());
+        
+        rightPanel.add(outputPane, BorderLayout.CENTER);
+        
+        rightPanel.setMinimumSize(new Dimension(300, 100));
+        rightPanel.setPreferredSize(new Dimension(350, 150));
+        splitPane.add(rightPanel);
+    }
+        
+    private static void createAndShowGUI() {
+        //Create and set up the window.
+        JFrame frame = new JFrame("Breakfast Calories");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ 
+        //Create and set up the content pane.
+        MyFirstTwo display = new MyFirstTwo();
+        display.setOpaque(true);
+        frame.setContentPane(display);
+ 
+        //Display the window.
+        frame.pack();
+        frame.setVisible(true);
+    }   
+        
+        
+            
+    public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+    	 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+             public void run() {
+                 createAndShowGUI();
+             }
+         });
+     }
+    
+    class SharedListSelectionHandler implements ListSelectionListener {
+        public void valueChanged(ListSelectionEvent e) { 
+            ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+            
+            boolean isAdjusting = e.getValueIsAdjusting(); 
+            if(!isAdjusting){
+            	
+            	 for(int i = 0; i < list.getModel().getSize(); i++) {
+                    output.append((String) list.getModel().getElementAt(i));
+            	 }
+			
+//            	ArrayList<HashMap<String, Integer>> mapList = new ArrayList<HashMap<String, Integer>>();
+ //               ((Map<String, Integer>) mapList).put("Scrambled Eggs(2)", 199);
+  //              ((Map<String, Integer>) mapList).put("Bacon(3)", 105);
+   //             ((Map<String, Integer>) mapList).put("Toast(2)", 180);
+    //            ((Map<String, Integer>) mapList).put("Milk(glass)", 103);
+     //           ((Map<String, Integer>) mapList).put("Orange Juice(glass)", 39);
+      //          ((Map<String, Integer>) mapList).put("Cereal(cup)", 125);
+       //         ((Map<String, Integer>) mapList).put("Muffin", 426);
+        //        ((Map<String, Integer>) mapList).put("Bagel", 245);
+         //       ((Map<String, Integer>) mapList).put("Jelly", 50);
+          //      ((Map<String, Integer>) mapList).put("Cream Cheese", 35);
+           //     ((Map<String, Integer>) mapList).put("Yogurt(cup)", 149);
+            //    ((Map<String, Integer>) mapList).put("Doughnut", 195);
+             //   ((Map<String, Integer>) mapList).put("Apple", 52);
+              //  ((Map<String, Integer>) mapList).put("Banana", 94);
+               // ((Map<String, Integer>) mapList).put("Grapes(cup)", 114);
+            	
+           	//selections = new String [selected.length];
+			//for (int i =0; i < selections.length ; i++){
+			//	System.out.println(selections[i]);
+								
+//				JList calorieNumbers = (JList)e.getSource();
+//				int[] calories = calorieNumbers.getSelectedIndices();
+//				
+//				if(calories != null){
+//					calories[0] = 199;
+//					calories[1] = 105;
+//					calories[2] = 180;
+//					calories[3] = 103;
+//					calories[4] = 39;
+//					calories[5] = 125;
+//					calories[6] = 426;
+//					calories[7] = 245;
+//					calories[8] = 50;
+//					calories[9] = 35;
+//					calories[10] = 149;
+//					calories[11] = 195;
+//					calories[12] = 52;
+//					calories[13] = 94;
+//					calories[14] = 114;
+					
+//				int sumCalories = 0;
+//				for(int c : calories) {
+//					 sumCalories += c;
+					
+				
+				//System.out.println(sum);
+				
+				//output.append(""
+						
+						
+						//selections[i] + 
+						//"-" + calories[i]
+					//	+ newline + 
+					//	"Total Calories of your breakfast:"
+						//		+ " " + sumCalories); 
+          //  output.append(//"Event for indexes "
+                        //  + 
+           // 		choice
+            		//+ " - " + lastIndex
+                      //    + "; isAdjusting is " + isAdjusting
+                        //  + "; selected indexes:"
+            
+            	//	);
+            }
+				}
+				}
+				
+ 
+   //         if (lsm.isSelectionEmpty()) {
+   //             output.append(" <none>");
+   //         } else {
+   //             // Find out which indexes are selected.
+   //             int minIndex = lsm.getMinSelectionIndex();
+   //             int maxIndex = lsm.getMaxSelectionIndex();
+   //             for (int i = minIndex; i <= maxIndex; i++) {
+   //                 if (lsm.isSelectedIndex(i)) {
+   //                     output.append(" " + i);
+   //                 }
+   //             }
+   //         }
+          //  output.append(newline);
+          //  output.setCaretPosition(output.getDocument().getLength());
+
+    }
+		
+   		
+
+
+		
