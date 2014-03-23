@@ -1,0 +1,371 @@
+package cl.washington.eclipse.first;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+
+
+
+
+
+public class MyFirstTwo extends JPanel 
+					implements ActionListener		 {
+	
+	int x=0;
+    int y=0;
+    int width=0;
+    int height=0;
+    JTextArea output;
+    JTextArea outputTwo;
+    JList list; 
+    String newline = "\n";
+    ListSelectionModel listSelectionModel;
+    ListSelectionEvent e;
+    JButton btnTotalCalories;
+    JButton btnStartOver;
+    List<Integer> allCalories = new ArrayList<Integer>();
+    
+
+    public  MyFirstTwo() {
+        super(new BorderLayout());
+ 
+        String[] breakfast = {"Scrambled Eggs(2 eggs)", "Bacon(3 strips)", "Toast(2 slices)", "2% Fat Milk(8oz glass)", 
+        		"Orange Juice(8oz glass)", "Cereal(cup)", "Muffin", "Bagel", 
+        		"Jelly (per serving)", "Cream Cheese (per serving)", "Yogurt(cup)", "Doughnut", "Apple", 
+        		"Banana", "Grapes(cup)"};
+        
+        list = new JList(breakfast);
+        
+                   
+ 
+       listSelectionModel = list.getSelectionModel();
+        listSelectionModel.addListSelectionListener(
+                new SharedListSelectionHandler());
+        
+        btnTotalCalories = new JButton("Total Calories");
+       
+        btnStartOver = new JButton("Start Over");
+        btnStartOver.setBounds(x=28, y=174, width=560, height=200);
+       
+        
+        JScrollPane listPane = new JScrollPane(list);
+
+        output = new JTextArea("  Studies state that breakfast calories should "
+        		+ "be between 350 and 500 calories. Less than 350 calories, and "
+        		+ "you risk insufficient calories for your body before lunch. More than 500 "
+        		+ "calories may cause your body to store the extra calories as fat." + 
+        		newline + newline + "Breakfast choices:" + newline, 20, 20);
+        output.setEditable(false);
+        output.setLineWrap(true);
+        output.setWrapStyleWord(true);
+        //output.setFont(new Font("SANS_SERIF", Font.BOLD, 14));
+        
+        outputTwo = new JTextArea("  Your breakfast calories add up to: ", 5, 5);
+        outputTwo.setEditable(false);
+        outputTwo.setLineWrap(true);
+        outputTwo.setWrapStyleWord(true);
+        outputTwo.setFont(new Font("SANS_SERIF", Font.BOLD, 14));
+                
+        JScrollPane outputPane = new JScrollPane(output,
+                         ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                         ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+   
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        add(splitPane, BorderLayout.CENTER);
+        splitPane.setBorder(null);
+        
+
+        
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
+        
+        JPanel listContainer = new JPanel(new GridLayout(1, 1));
+        listContainer.setBorder(BorderFactory.createTitledBorder(
+                                                "Breakfast Items"));
+        listContainer.add(listPane);
+        listContainer.addMouseListener(
+        		new SharedListSelectionHandler());
+          
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(5,5,0,5));
+        leftPanel.add(listContainer);
+        
+        JPanel boxForButtons = new JPanel(new GridLayout(2, 1));
+        boxForButtons.add(btnTotalCalories);
+        boxForButtons.add(btnStartOver);
+        JPanel onlyForButtons = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.weighty = 1;
+        onlyForButtons.add(boxForButtons, gbc);
+        JPanel forButtons = new JPanel(new GridBagLayout());
+        forButtons.add(boxForButtons, gbc);
+    
+        leftPanel.add(forButtons);
+        leftPanel.setMinimumSize(new Dimension(200, 100));
+        leftPanel.setPreferredSize(new Dimension(200, 200));
+        splitPane.add(leftPanel);
+        
+ 
+        JPanel rightPanel = 
+        		new JPanel(new BorderLayout());
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
+        rightPanel.add(outputPane, BorderLayout.CENTER);
+        rightPanel.add(outputTwo, BorderLayout.CENTER);
+        rightPanel.setMinimumSize(new Dimension(300, 150));
+        rightPanel.setPreferredSize(new Dimension(350, 200));
+        splitPane.add(rightPanel);
+    
+    
+    
+    btnTotalCalories.addActionListener(new ActionListener() {
+    	
+		 public void actionPerformed(ActionEvent e){
+		
+			 int sum = 0;
+		    	for(int rr : allCalories){
+		    		sum += rr;    		
+		    	}
+   		 
+   		 if(list.isSelectionEmpty() == true){
+   			 
+   			 outputTwo.append(newline + " Please make a selection.");
+    			 
+   		 }
+   		 else{
+   			 outputTwo.append(String.valueOf(sum));
+ 		 }
+    		 
+   
+    		 allCalories.clear();
+    		 btnTotalCalories.setEnabled(false);
+			 
+		 }
+		 });
+    
+    btnStartOver.addActionListener(new ActionListener(){
+    	
+    	public void actionPerformed(ActionEvent e){
+    		
+    		allCalories.clear();
+    		output.setText("  Studies state that breakfast calories should "
+            		+ "be between 350 and 500 calories. Less than 350 calories, and "
+            		+ "you risk insufficient calories for your body before lunch. More than 500 "
+            		+ "calories may cause your body to store the extra calories as fat." + 
+            		newline + newline + "Breakfast choices:" + newline);
+    	 	outputTwo.setText("  Your breakfast calories add up to: ");
+	 	
+    	 	btnTotalCalories.setEnabled(true);
+    	 	
+    	}
+    });
+	
+    
+    } 
+    
+       
+    private static void createAndShowGUI() {
+        //Create and set up the window.
+        JFrame frame = new JFrame("Breakfast Calories");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+         
+        //Create and set up the content pane.
+        MyFirstTwo display = new MyFirstTwo();
+        display.setOpaque(true);
+        frame.setContentPane(display);
+        //frame.add(splitPaneVertical);
+ 
+        //Display the window.
+        frame.pack();
+        frame.setVisible(true);
+    }   
+        
+        
+            
+    public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+    	 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+             public void run() {
+                 createAndShowGUI();
+                 
+             }
+         });
+     }
+    
+            	   
+    class SharedListSelectionHandler extends MouseAdapter
+    					implements ListSelectionListener {
+    	
+        public void valueChanged(ListSelectionEvent e) { 
+        	
+        	 boolean isAdjusting = e.getValueIsAdjusting(); 
+	            if(!isAdjusting){
+	        
+	            	ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+	            	
+	            	
+        	     	int i = -1;  	
+        	     	if(list.getSelectedIndex()==0){
+        	     		i = 199;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==1){
+        	     		i = 105;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==2){
+        	     		i = 180;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==3){
+        	     		i = 122;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==4){
+        	     		i = 102;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==5){
+        	     		i = 125;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==6){
+        	     		i = 426;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==7){
+        	     		i = 245;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==8){
+        	     		i = 50;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==9){
+        	     		i = 35;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==10){
+        	     		i = 149;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==11){
+        	     		i = 195;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==12){
+        	     		i = 52;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==13){
+        	     		i = 94;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     	
+        	     	if(list.getSelectedIndex()==14){
+        	     		i = 114;
+        	     		allCalories.add(i);
+        	     		String.valueOf(i);
+        	     	}
+        	     		  	     	
+        	     	output.append((String)list.getModel().getElementAt(list.getSelectedIndex()) 
+        	      			 .toString() + "  " + i + " calories" + newline);}
+	            
+	            
+	            
+	            };
+	            
+        	        	
+        	        	 }
+    
+   
+	            
+	            
+        
+	           
+	            	
+	            	
+	             
+            	
+          
+            
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+   
+				}
+							 
+				
+				
+ 
+    
+							 
+
+		
+   		
+
+
+		
